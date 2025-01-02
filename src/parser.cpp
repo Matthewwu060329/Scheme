@@ -55,9 +55,9 @@ Expr List :: parse(Assoc &env) {
             ExprType expr = iter2->second;
             if(expr == E_LAMBDA) {
                 vector<std::string> xs;
-                if(stxs.size() != 3) throw RuntimeError(string("11" + std::to_string(stxs.size())));
+                if(stxs.size() != 3) throw Expr(new Lambda(xs, Expr(nullptr)));
                 List* list1 = dynamic_cast<List*>(stxs[1].get());
-                if(list1 == nullptr) throw RuntimeError(string("22"));
+                if(list1 == nullptr) throw Expr(new Lambda(xs, Expr(nullptr)));
                 Expr expr = nullptr;
                 Assoc env1 = env;
                 for(int i = 0; i < list1->stxs.size(); i++) {

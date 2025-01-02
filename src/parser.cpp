@@ -56,7 +56,6 @@ Expr List :: parse(Assoc &env) {
             if(expr == E_LAMBDA) {
                 vector<std::string> xs;
                 if(stxs.size() != 3) throw RuntimeError(string("11" + std::to_string(stxs.size())));
-                // Test Git rebase
                 List* list1 = dynamic_cast<List*>(stxs[1].get());
                 if(list1 == nullptr) throw RuntimeError(string("22"));
                 Expr expr = nullptr;

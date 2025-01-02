@@ -74,6 +74,20 @@ Expr List :: parse(Assoc &env) {
             }
             if(expr == E_QUOTE) {
                 if(stxs.size() != 2) return Expr(new Quote(Syntax(nullptr)));
+                List* list = dynamic_cast<List*>(stxs[1].get());
+                if(list != nullptr) {
+                    int count = 0;
+                    for(int i = 0; i < list->stxs.size(); i++) {
+                        Identifier* var = dynamic_cast<Identifier*>(list->stxs[i].get());
+                        if(var != nullptr && var->s == ".") count++;
+                    }
+                    if(count >= 2) return Expr(new Quote(Syntax(nullptr)));
+                    else if(count == 1) {
+                        if(list->stxs.size() <= 2) return Expr(new Quote(Syntax(nullptr)));
+                        Identifier* var = dynamic_cast<Identifier*>(list->stxs[list->stxs.size() - 2].get());
+                        if(!(var != nullptr && var->s == ".")) return Expr(new Quote(Syntax(nullptr)));
+                    }
+                }
                 return Expr(new Quote(stxs[1]));
             }
             if(expr == E_BEGIN) {

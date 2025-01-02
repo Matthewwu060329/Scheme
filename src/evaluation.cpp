@@ -140,12 +140,6 @@ Value Quote::eval(Assoc &e) {
 
     List* lst = dynamic_cast<List*>(s.get());
     if(lst != nullptr){
-        int count = 0;
-        for(int i = 0; i < lst->stxs.size(); i++){
-            Identifier* ide = dynamic_cast<Identifier*>(lst->stxs[i].get());
-            if(ide != nullptr && ide->s == ".") count++;
-        }
-        if(count >= 2) throw RuntimeError("Too many dots in 'Quote'");
         if(lst->stxs.size() == 0) return NullV();
         Quote first_quote(lst->stxs[0]);
         Value v = first_quote.eval(e);
@@ -153,13 +147,21 @@ Value Quote::eval(Assoc &e) {
         if(lst->stxs.size() == 3){
             Identifier* ide1 = dynamic_cast<Identifier*>(lst->stxs[1].get());
             if(ide1 != nullptr && ide1->s == ".") {
+                // List* lst2 = dynamic_cast<List*>(lst->stxs[2].get());
+                // if(lst2 != nullptr) {
+                //     List* lst3 = new List();
+                //     lst3->stxs.push_back(lst->stxs[2]);
+                //     Quote quote0(lst3);
+                //     Value value0 = quote0.eval(e);
+                //     return Value(new Pair(v, value0));
+                // }
                 Quote quote1(lst->stxs[2]);
                 Value value1 = quote1.eval(e);
                 return Value(new Pair(v,value1));
             }
         }
 
-        List *list = new List();
+        List* list = new List();
         for(int i = 1; i < lst->stxs.size(); i++) list->stxs.push_back(lst->stxs[i]);
         Syntax second_list(list);
         Expr second_v(new Quote(second_list));
@@ -328,6 +330,5 @@ Value Car::evalRator(const Value &rand) {
 Value Cdr::evalRator(const Value &rand) {
     Pair* pair = dynamic_cast<Pair*>(rand.get());
     if(pair == nullptr) throw RuntimeError(std::string("Inappropriate pair type error"));
-    Value subpair = pair->cdr;
-    return subpair;
+    return pair->cdr;
 } // cdr

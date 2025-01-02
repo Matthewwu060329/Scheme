@@ -147,15 +147,6 @@ Value Quote::eval(Assoc &e) {
         if(lst->stxs.size() == 3){
             Identifier* ide1 = dynamic_cast<Identifier*>(lst->stxs[1].get());
             if(ide1 != nullptr && ide1->s == ".") {
-                List* lst2 = dynamic_cast<List*>(lst->stxs[2].get());
-                if(lst2 != nullptr) {
-                    lst2->stxs.push_back(new List());
-                    List* lst3 = new List();
-                    lst3->stxs.push_back(lst->stxs[2]);
-                    Quote quote0(lst3);
-                    Value value0 = quote0.eval(e);
-                    return Value(new Pair(v, value0));
-                }
                 Quote quote1(lst->stxs[2]);
                 Value value1 = quote1.eval(e);
                 return Value(new Pair(v,value1));
